@@ -42,6 +42,7 @@ function reducer(state, action) {
     case "searchIPAddress":
       return {
         ...state,
+        queryString: action.payload,
       };
 
     case "loading":
