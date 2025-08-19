@@ -54,6 +54,7 @@ function reducer(state, action) {
     case "error":
       return {
         ...state,
+        isLoading: false,
         error: action.payload,
       };
 
@@ -75,6 +76,7 @@ function TrackerProvider({ children }) {
       dispatch({ type: "loading", payload: true });
       try {
         const res = await fetch(`${API_URL}`);
+        if (!res.ok) throw new Error(`Request failed: ${res.status}`);
         const data = await res.json();
         console.log(data.ip);
 
@@ -82,10 +84,10 @@ function TrackerProvider({ children }) {
           type: "fetchUserIPAddress",
           payload: data.ip,
         });
-      } catch {
+      } catch (err) {
         dispatch({
           type: "error",
-          payload: "An error occured getting the users IP Address",
+          payload: err.message,
         });
       }
     }
@@ -100,6 +102,8 @@ function TrackerProvider({ children }) {
         const res = await fetch(
           `${BASE_URL}${API_KEY}&ipAddress=${userIpAddress}`
         );
+
+        if (!res.ok) throw new Error(`Request failed: ${res.status}`);
         const data = await res.json();
 
         console.log(data);
@@ -108,10 +112,10 @@ function TrackerProvider({ children }) {
           type: "fetchUserIPAddressInfo",
           payload: data,
         });
-      } catch {
+      } catch (err) {
         dispatch({
           type: "error",
-          payload: "An error occured getting the users IP Address",
+          payload: err.message,
         });
       }
     }
@@ -120,31 +124,25 @@ function TrackerProvider({ children }) {
   }, [userIpAddress]);
 
   //   Effect fetching searched IP Address or Domain Data
+  async function searchIpAddressInfo(ip) {
+    try {
+      const res = await fetch(`${BASE_URL}${API_KEY}&ipAddress=${ip}`);
+      if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+      const data = await res.json();
 
-  useEffect(() => {
-    async function searchIpAddressInfo() {
-      try {
-        const res = await fetch(
-          `${BASE_URL}${API_KEY}&ipAddress=${queryString}`
-        );
-        const data = await res.json();
+      console.log(data);
 
-        console.log(data);
-
-        dispatch({
-          type: "fetchSearchedIPAddressInfo",
-          payload: data,
-        });
-      } catch {
-        dispatch({
-          type: "error",
-          payload: "An error occured getting the users IP Address",
-        });
-      }
+      dispatch({
+        type: "fetchSearchedIPAddressInfo",
+        payload: data,
+      });
+    } catch (err) {
+      dispatch({
+        type: "error",
+        payload: err.message,
+      });
     }
-
-    searchIpAddressInfo();
-  }, [queryString]);
+  }
 
   return (
     <TrackerContext.Provider
@@ -154,6 +152,7 @@ function TrackerProvider({ children }) {
         ipAddressData,
         isLoading,
         error,
+        searchIpAddressInfo,
         dispatch,
       }}
     >

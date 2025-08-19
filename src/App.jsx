@@ -5,7 +5,7 @@ import { TrackerProvider } from "./contexts/TrackerContext";
 
 export default function App() {
   return (
-    <div className="font-display">
+    <div className="w-full font-display">
       <TrackerProvider>
         <Header />
         <Map />

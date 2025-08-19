@@ -1,6 +1,8 @@
 import { MapContainer, TileLayer, Marker, Popup } from "leaflet";
+import { useTracker } from "../contexts/TrackerContext";
 
 export default function Map() {
+  const { lat, lng } = useTracker();
   return (
     <div className=" w-full h-[65svh] flex items-center justify-center bg-gray-500 text-heading ">
       Please try loading the map again
