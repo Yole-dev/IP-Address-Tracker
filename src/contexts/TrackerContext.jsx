@@ -30,6 +30,7 @@ function reducer(state, action) {
       return {
         ...state,
         ipAddressData: action.payload,
+        isLoading: false,
       };
 
     case "fetchSearchedIPAddressInfo":
@@ -97,6 +98,7 @@ function TrackerProvider({ children }) {
 
   useEffect(() => {
     async function getUserIpAddressInfo() {
+      dispatch({ type: "loading", payload: true });
       try {
         const res = await fetch(
           `${BASE_URL}${API_KEY}&ipAddress=${userIpAddress}`
