@@ -22,7 +22,6 @@ function reducer(state, action) {
     case "fetchUserIPAddress":
       return {
         ...state,
-        queryString: action.payload,
         userIpAddress: action.payload,
         isLoading: false,
       };
