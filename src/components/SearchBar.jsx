@@ -22,7 +22,7 @@ export default function SearchBar() {
             payload: e.target.value,
           });
         }}
-        className="h-[55px] w-[85%] text-body text-dark-gray indent-[1.5rem] bg-white rounded-s-[1rem] focus:outline-0 lg:w-[87%] lg:h-[80px] lg:text-[18px] lg:rounded-e-[1.5rem]"
+        className="h-[55px] w-[85%] text-body text-dark-gray indent-[1.5rem] bg-white rounded-s-[1rem] focus:outline-0 lg:w-[87%] lg:h-[80px] lg:text-[18px] lg:rounded-s-[1.5rem]"
       />
       <button
         onClick={handleSearch}

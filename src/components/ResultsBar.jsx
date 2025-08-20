@@ -24,7 +24,7 @@ export default function ResultsBar() {
 
 function IPinfo({ title, value }) {
   return (
-    <div className="flex flex-col items-center gap-[0.3rem] text-center lg:items-start lg:text-left">
+    <div className="flex flex-col items-center gap-[0.1rem] text-center lg:items-start lg:text-left lg:gap-[0.7rem]">
       <p className="uppercase text-body text-light-gray text-[14px] font-[500] lg:text-[16px] ">
         {title}
       </p>
