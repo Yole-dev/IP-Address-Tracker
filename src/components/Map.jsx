@@ -1,43 +1,53 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { useTracker } from "../contexts/TrackerContext";
 import "leaflet/dist/leaflet.css";
+import Spinner from "./Spinner";
 
 export default function Map() {
-  const { ipAddressData } = useTracker();
+  const { ipAddressData, isLoading, error } = useTracker();
   const { location } = ipAddressData || {};
 
-  if (!location) {
-    return <MapErrorView />;
-  }
+  return (
+    <div className="w-full h-[65vh] flex items-center justify-center">
+      {(isLoading || !ipAddressData) && <Spinner />}
 
-  const { lat, lng } = location;
+      {!isLoading && ipAddressData && <MapLayout location={location} />}
 
-  return <MapLayout lat={lat} lng={lng} />;
+      {!isLoading && !ipAddressData && <MapErrorView />}
+    </div>
+  );
 }
 
-function MapLayout({ lat, lng }) {
-  const position = [lat || 0, lng || 0];
+function MapLayout({ location }) {
+  const lat = location?.lat || 0;
+  const lng = location?.lng || 0;
+  const position = [lat, lng];
+
+  console.log(position);
 
   return (
-    <div className="w-full h-[65svh]">
-      <MapContainer center={position} zoom={10} scrollWheelZoom={true}>
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <Marker position={position}>
-          <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
-        </Marker>
-      </MapContainer>
-    </div>
+    <MapContainer
+      center={position}
+      zoom={13}
+      scrollWheelZoom={true}
+      style={{ height: "100%", width: "100%" }}
+    >
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <Marker position={position}>
+        <Popup>
+          A pretty CSS3 popup. <br /> Easily customizable.
+        </Popup>
+      </Marker>
+    </MapContainer>
   );
 }
 
 function MapErrorView() {
   return (
-    <div className=" w-full h-[65svh] flex items-center justify-center bg-gray-500 text-heading ">
+    <div className=" w-full bg-gray-500 text-heading ">
       Please try loading the map again
     </div>
   );
