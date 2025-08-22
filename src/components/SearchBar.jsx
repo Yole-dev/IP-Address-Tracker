@@ -22,11 +22,11 @@ export default function SearchBar() {
             payload: e.target.value,
           });
         }}
-        className="h-[55px] w-[85%] text-body text-dark-gray indent-[1.5rem] bg-white rounded-s-[1rem] focus:outline-0 lg:w-[87%] lg:h-[80px] lg:text-[18px] lg:rounded-s-[1.5rem]"
+        className="h-[55px] w-[85%] text-body text-dark-gray indent-[1.5rem] bg-white rounded-s-[1rem] focus:outline-0 cursor-pointer lg:w-[87%] lg:h-[80px] lg:text-[18px] lg:rounded-s-[1.5rem]"
       />
       <button
         onClick={handleSearch}
-        className="h-[55px] w-[15%] flex items-center justify-center rounded-e-[1rem] text-white bg-dark-gray lg:w-[13%] lg:h-[80px] lg:rounded-e-[1.5rem] "
+        className="h-[55px] w-[15%] flex items-center justify-center rounded-e-[1rem] text-white bg-dark-gray hover:bg-light-gray cursor-pointer lg:w-[13%] lg:h-[80px] lg:rounded-e-[1.5rem] "
       >
         <img
           src={rightArrowIcon}

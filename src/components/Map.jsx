@@ -30,7 +30,8 @@ function MapLayout({ location }) {
       center={position}
       zoom={13}
       scrollWheelZoom={true}
-      className="w-full h-full"
+      zoomControl={false}
+      className="w-full h-full inset-0 z-0"
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
