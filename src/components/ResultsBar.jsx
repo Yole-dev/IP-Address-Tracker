@@ -5,7 +5,7 @@ export default function ResultsBar() {
   const { ipAddressData, isLoading, error } = useTracker();
   console.log(ipAddressData);
   return (
-    <div className="w-[90%] h-[370px] flex items-center justify-center lg:w-[60%] lg:h-[150px] bg-white rounded-[1rem]">
+    <div className="w-[90%] h-[370px] flex items-center justify-center bg-white rounded-[1rem] md:w-[75%] md:h-[320px] lg:w-[95%] lg:h-[150px] xl:w-[80%] 2xl:w-[60%] ">
       {(isLoading || !ipAddressData) && <Spinner />}
 
       {!isLoading && ipAddressData && !error && (

@@ -13,7 +13,7 @@ export default function Map() {
 
       {!isLoading && ipAddressData && <MapLayout location={location} />}
 
-      {!isLoading && !ipAddressData && error && <MapErrorView error={error} />}
+      {!isLoading && error && <MapErrorView error={error} />}
     </div>
   );
 }
