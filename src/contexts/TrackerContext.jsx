@@ -63,39 +63,58 @@ function reducer(state, action) {
   }
 }
 
+function getErrorMessage(status) {
+  switch (status) {
+    case 400:
+      return "Bad Request: Some required fields are missing or have invalid values.";
+    case 401:
+      return "Unauthorized: Missing or Invalid API key.";
+    case 403:
+      return "Access restricted: Check credits balance or API key validity.";
+    case 422:
+      return "Unprocessable Entity: Input correct request parameters or search term.";
+    case 429:
+      return "Too Many Requests. Try again later.";
+
+    default:
+      return "An unexpected error occurred.";
+  }
+}
+
 function TrackerProvider({ children }) {
   const [
     { queryString, userIpAddress, ipAddressData, isLoading, error },
     dispatch,
   ] = useReducer(reducer, initialState);
 
-  // Effect fetching User's IP Address
-
+  // Effect: Get user's IP
   useEffect(() => {
     async function getUserIpAddress() {
-      dispatch({ type: "loading", payload: true });
+      dispatch({ type: "loading" });
       try {
-        const res = await fetch(`${API_URL}`);
-        if (!res.ok) throw new Error(`Request failed: ${res.status}`);
-        const data = await res.json();
-        console.log(data.ip);
+        const res = await fetch(API_URL);
+        if (!res.ok) throw new Error(`Status: ${res.status}`);
 
+        const data = await res.json();
         dispatch({
           type: "fetchUserIPAddress",
           payload: data.ip,
         });
       } catch (err) {
+        const status = err.message.includes("Status")
+          ? parseInt(err.message.split(":")[1])
+          : null;
         dispatch({
           type: "error",
-          payload: err.message,
+          payload: getErrorMessage(status),
         });
       }
     }
+
     getUserIpAddress();
   }, []);
 
-  // Effect fetching User's IP Address Data.
-
+  // Effect: Get IP info
   useEffect(() => {
     async function getUserIpAddressInfo() {
       dispatch({ type: "loading", payload: true });
@@ -103,10 +122,9 @@ function TrackerProvider({ children }) {
         const res = await fetch(
           `${BASE_URL}${API_KEY}&ipAddress=${userIpAddress}`
         );
+        if (!res.ok) throw new Error(`Status: ${res.status}`);
 
-        if (!res.ok) throw new Error(`Request failed: ${res.status}`);
         const data = await res.json();
-
         console.log(data);
 
         dispatch({
@@ -114,9 +132,12 @@ function TrackerProvider({ children }) {
           payload: data,
         });
       } catch (err) {
+        const status = err.message.includes("Status")
+          ? parseInt(err.message.split(":")[1])
+          : null;
         dispatch({
           type: "error",
-          payload: err.message,
+          payload: getErrorMessage(status),
         });
       }
     }
@@ -124,11 +145,11 @@ function TrackerProvider({ children }) {
     getUserIpAddressInfo();
   }, [userIpAddress]);
 
-  //   Effect fetching searched IP Address or Domain Data
+  // Manual search called in SearchBar component.
   async function searchIpAddressInfo(ip) {
     try {
       const res = await fetch(`${BASE_URL}${API_KEY}&ipAddress=${ip}`);
-      if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+      if (!res.ok) throw new Error(`Status: ${res.status}`);
       const data = await res.json();
 
       console.log(data);
@@ -138,9 +159,12 @@ function TrackerProvider({ children }) {
         payload: data,
       });
     } catch (err) {
+      const status = err.message.includes("Status")
+        ? parseInt(err.message.split(":")[1])
+        : null;
       dispatch({
         type: "error",
-        payload: err.message,
+        payload: getErrorMessage(status),
       });
     }
   }

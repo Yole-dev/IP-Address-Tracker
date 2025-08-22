@@ -6,8 +6,9 @@ import { TrackerProvider } from "./contexts/TrackerContext";
 export default function App() {
   return (
     <div className="w-full font-display">
+      <Header />
+
       <TrackerProvider>
-        <Header />
         <Map />
         <Main />
       </TrackerProvider>

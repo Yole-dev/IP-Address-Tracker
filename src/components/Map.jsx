@@ -9,11 +9,11 @@ export default function Map() {
 
   return (
     <div className="w-full h-[65vh] flex items-center justify-center">
-      {(isLoading || !ipAddressData) && <Spinner />}
+      {(isLoading || !ipAddressData?.location) && <Spinner />}
 
       {!isLoading && ipAddressData && <MapLayout location={location} />}
 
-      {!isLoading && !ipAddressData && <MapErrorView />}
+      {!isLoading && !ipAddressData && error && <MapErrorView error={error} />}
     </div>
   );
 }
@@ -30,7 +30,7 @@ function MapLayout({ location }) {
       center={position}
       zoom={13}
       scrollWheelZoom={true}
-      style={{ height: "100%", width: "100%" }}
+      className="w-full h-full"
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -45,10 +45,6 @@ function MapLayout({ location }) {
   );
 }
 
-function MapErrorView() {
-  return (
-    <div className=" w-full bg-gray-500 text-heading ">
-      Please try loading the map again
-    </div>
-  );
+function MapErrorView({ error }) {
+  return <div className=" w-full bg-gray-200 text-heading ">{error}</div>;
 }

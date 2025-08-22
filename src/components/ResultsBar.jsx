@@ -8,11 +8,11 @@ export default function ResultsBar() {
     <div className="w-[90%] h-[370px] flex items-center justify-center lg:w-[60%] lg:h-[150px] bg-white rounded-[1rem]">
       {(isLoading || !ipAddressData) && <Spinner />}
 
-      {!isLoading && ipAddressData && (
+      {!isLoading && ipAddressData && !error && (
         <ResultsBarContent ipAddressData={ipAddressData} />
       )}
 
-      {!isLoading && !ipAddressData && "No Data Available"}
+      {!isLoading && !ipAddressData && error && <p>{error}</p>}
     </div>
   );
 }
@@ -21,21 +21,28 @@ function ResultsBarContent({ ipAddressData }) {
   const { ip, location, isp } = ipAddressData || {};
   const { region, city, timezone } = location || {};
   return (
-    <div className=" flex flex-col items-center justify-center gap-[1rem] lg:w-full lg:flex-row lg:items-start lg:justify-around ">
-      <IPinfo title="ip address" value={`${ip ? ip : "N/A"}`} />
-      <IPinfo
-        title="location"
-        value={`${region ? region : "N/A"}, ${city ? city : "N/A"}`}
-      />
-      <IPinfo title="timezone" value={`${timezone ? timezone : "N/A"}`} />
-      <IPinfo title="isp" value={`${isp ? isp : "N/A"}`} />
-    </div>
+    <>
+      {ipAddressData && (
+        <div className=" flex flex-col items-center justify-center gap-[1rem] lg:w-full lg:flex-row lg:items-start lg:justify-evenly ">
+          <IPinfo title="ip address" value={`${ip ? ip : "N/A"}`} />
+          <IPinfo
+            title="location"
+            value={`${region ? region : "N/A"}, ${city ? city : "N/A"}`}
+          />
+          <IPinfo
+            title="timezone"
+            value={`UTC ${timezone ? timezone : "N/A"}`}
+          />
+          <IPinfo title="isp" value={`${isp ? isp : "N/A"}`} />
+        </div>
+      )}
+    </>
   );
 }
 
 function IPinfo({ title, value }) {
   return (
-    <div className="flex flex-col items-center gap-[0.1rem] text-center lg:items-start lg:text-left lg:gap-[0.7rem]">
+    <div className="w-full flex flex-col items-center gap-[0.1rem] text-center lg:w-auto lg:items-start lg:text-left lg:gap-[0.7rem] ">
       <p className="uppercase text-body text-light-gray text-[14px] font-[500] lg:text-[16px] ">
         {title}
       </p>
