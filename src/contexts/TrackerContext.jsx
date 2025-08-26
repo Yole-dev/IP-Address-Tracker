@@ -10,9 +10,6 @@ const initialState = {
   queryString: "",
   ipAddressData: {},
   userIpAddress: "",
-  lat: "",
-  lng: "",
-  isp: "",
   isLoading: false,
   error: "",
 };

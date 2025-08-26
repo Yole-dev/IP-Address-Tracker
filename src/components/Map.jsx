@@ -1,7 +1,9 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
+import L from "leaflet";
 import { useTracker } from "../contexts/TrackerContext";
 import "leaflet/dist/leaflet.css";
 import Spinner from "./Spinner";
+import customMarker from "../assets/images/icon-location.svg";
 
 export default function Map() {
   const { ipAddressData, isLoading, error } = useTracker();
@@ -19,11 +21,16 @@ export default function Map() {
 }
 
 function MapLayout({ location }) {
-  const lat = location?.lat || 0;
-  const lng = location?.lng || 0;
-  const position = [lat, lng];
+  const mapLat = location?.lat || 0;
+  const mapLng = location?.lng || 0;
+  const position = [mapLat, mapLng];
 
-  console.log(position);
+  // adding custom marker img
+  const customMarkerIcon = L.icon({
+    iconUrl: customMarker,
+    iconSize: [60, 70],
+    iconAnchor: position,
+  });
 
   return (
     <MapContainer
@@ -37,13 +44,17 @@ function MapLayout({ location }) {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Marker position={position}>
-        <Popup>
-          A pretty CSS3 popup. <br /> Easily customizable.
-        </Popup>
-      </Marker>
+      <Marker position={position} icon={customMarkerIcon} />
+      <ChangeMapPosition position={position} />
     </MapContainer>
   );
+}
+
+function ChangeMapPosition({ position }) {
+  const map = useMap();
+  map.setView(position);
+
+  return null;
 }
 
 function MapErrorView({ error }) {
